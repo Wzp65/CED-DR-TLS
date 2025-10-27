@@ -38,7 +38,7 @@ def get_argparser():
     return args
 
 
-API_SECRET_KEY = "sk-zk28a8e015c5de77c88d5f8bc4f5ee02aa168f62be1e47be"
+API_SECRET_KEY = "xxxxxx"
 BASE_URL = "https://api.zhizengzeng.com/v1/"
 
 # chat with other model
