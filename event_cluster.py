@@ -33,7 +33,7 @@ def get_argparser():
     parser.add_argument("--dataset", type=str, required=True)
     parser.add_argument("--dataset_path", type=str, default="./datasets")
     parser.add_argument("--model", type=str, default="bert-large-cased")
-    parser.add_argument("--Qwen_model", type=str, default="/mnt/sdb1/wangzeping2023/Qwen/Qwen3-4B")
+    parser.add_argument("--Qwen_model", type=str, default="/mnt/sdb1/Qwen/Qwen3-4B")
     args = parser.parse_args()
     return args
 
@@ -551,16 +551,16 @@ if __name__ == "__main__":
                 prompt = RELATION_STATEMENTS_SUMMARY_PROMPT
             else:
                 prompt = RELATION_STATEMENTS_SUMMARY_PROMPT_TMP
-        '''
+        
         relation_events_summarization(dir_path, args.dataset, k, prompt)
         id2events_construction(dir_path, args.dataset, k)
-        '''
+        
         '''
         client = chromadb.PersistentClient()
         client.delete_collection(name=f"gte_id2event_{args.dataset}_{k}")
         '''
-        '''
+        
         db_id2event = create_db_id2event(dir_path, args.dataset, k, gte_model)
         same_events_clustering(dir_path, args.dataset, k, db_id2event)
-        '''
+        
         same_cluster_splitting(dir_path, args.dataset, k, gte_model) 
