@@ -626,7 +626,7 @@ if __name__ == "__main__":
         candidate_coarse_filtering(k_coarse_filter_path, k_candidate_path, model, tokenizer, db_word, db_sentence, device, k)
         k_filter_path = os.path.join(des_dir, "candidate_filtering.json")
         remove_duplicate(k_coarse_filter_path, k_filter_path, k)
-        '''
+        
         gte_model = SentenceTransformer('thenlper/gte-large').to(device)
         db_gte_sent = create_gte_chroma(k_filter_path, args.dataset, k, gte_model)
 
@@ -639,4 +639,4 @@ if __name__ == "__main__":
         
         same_event_file_path = os.path.join(des_dir, "same_event.json")
         acquire_connected_event(des_dir, same_event_file_path, gte_model, db_gte_sent, args.dataset, k)  
-        '''
+        
