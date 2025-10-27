@@ -42,7 +42,7 @@ def get_argparser():
     parser.add_argument("--dataset", type=str, required=True)
     parser.add_argument("--dataset_path", type=str, default="./datasets")
     parser.add_argument("--src_dir", type=str, default="./processing")
-    parser.add_argument("--Qwen_model", type=str, default="/mnt/sdb1/wangzeping2023/Qwen/Qwen3-4B")
+    parser.add_argument("--Qwen_model", type=str, default="/mnt/sdb1/Qwen/Qwen3-4B")
     parser.add_argument("--des_dir", type=str, default="./timeline")
     args = parser.parse_args()
     return args
@@ -67,7 +67,7 @@ def date_to_summaries(timeline):
 
     return timeline_dic
 
-API_SECRET_KEY = "sk-zk28a8e015c5de77c88d5f8bc4f5ee02aa168f62be1e47be"
+API_SECRET_KEY = "xxxxxx"
 BASE_URL = "https://api.zhizengzeng.com/v1/"
 
 # chat with other model
