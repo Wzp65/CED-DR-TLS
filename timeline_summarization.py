@@ -434,12 +434,7 @@ def filtered_timelines(golden_timelines, timeline_event_info, dataset, keyword, 
                 parser_event_time = parse_time(event_info["time"])
             except:
                 continue
-            '''
-            if parser_event_time < parse_start_time and (parse_start_time - parser_event_time).days >= day_diff:
-                continue
-            if parser_event_time > parse_end_time and (parser_event_time - parse_end_time).days >= day_diff:
-                continue
-            '''
+            
             if parser_event_time < parse_start_time:
                 continue
             if parser_event_time > parse_end_time:
@@ -457,11 +452,7 @@ def filtered_timelines(golden_timelines, timeline_event_info, dataset, keyword, 
             tilse_timeline[event_time_date].append(event_info["content"])
 
         tilse_timeline_tmp = copy.deepcopy(tilse_timeline)
-        '''
-        for key, value in tilse_timeline_tmp.items():
-            if len(value) == 0:
-                del tilse_timeline[key]
-        '''
+        
         tilse_timeline_tmp = {key.strftime("%Y-%m-%d"): value for key, value in tilse_timeline.items()}
 
         pred_timelines.append(tilse_timeline_tmp)
@@ -513,23 +504,7 @@ def clean_llm_output(timelines):
 
 
 def furthur_filtering(pred_timelines, time_list, dataset, keyword, des_dir, average_timeline_length):
-    '''
-    date_list = []
-    for timestamp in time_list:
-        parse_gold_time = parse_time(timestamp)
-        date_time = parse_gold_time.date()
-        date_list = date_list + [
-            (date_time - timedelta(days=i)).strftime("%Y-%m-%d")  # 前 3 天
-            for i in range(3, 0, -1)
-        ] + [
-            date_time.strftime("%Y-%m-%d")  # 当天
-        ] + [
-            (date_time + timedelta(days=i)).strftime("%Y-%m-%d")  # 后 3 天
-            for i in range(1, 3)
-        ]
-    date_list = sorted(list(set(date_list)))
-    print(date_list)
-    '''
+    
     with open(os.path.join(des_dir, "split_timelines.json"), "r", encoding="utf-8") as f:
         split_timelines = json.load(f)
 
@@ -597,7 +572,7 @@ def final_timeline_formation(dataset, keyword, des_dir, src_dir, keywords_str, a
     time_list = list(set([timestamp[0] for timestamp in time_count]))
     
 
-    '''
+    
     with open(os.path.join(des_dir, "pred_timelines.json"), "r", encoding="utf-8") as f:
         pred_timelines = json.load(f)
 
@@ -637,7 +612,7 @@ def final_timeline_formation(dataset, keyword, des_dir, src_dir, keywords_str, a
 
     with open(os.path.join(des_dir, "final_pred_timelines.json"), "w", encoding="utf-8") as f:
         json.dump(pred_timelines, f, ensure_ascii=False, indent=4)
-    '''
+    
     with open(os.path.join(des_dir, "final_pred_timelines.json"), "r", encoding="utf-8") as f:
         pred_timelines = json.load(f)
 
@@ -645,7 +620,7 @@ def final_timeline_formation(dataset, keyword, des_dir, src_dir, keywords_str, a
                 
 
 def evaluate_timelines(golden_timelines, dataset, keyword, des_dir):
-    '''
+    
     if os.path.exists(os.path.join(des_dir, "pred_timelines_info.json")):
         with open(os.path.join(des_dir, "pred_timelines_info.json"), "r", encoding="utf-8") as f:
             pred_timelines = json.load(f)
@@ -654,16 +629,16 @@ def evaluate_timelines(golden_timelines, dataset, keyword, des_dir):
             for event_time_str, events_list in pred_timeline_tmp.items():
                 events_list = [event_c for event_c in events_list if event_c != ""]
                 pred_timeline[event_time_str] = events_list
-    ''' 
+    
     with open(os.path.join(des_dir, "final_pred_timelines_1.json"), "r", encoding="utf-8") as f:
         pred_timelines = json.load(f)
-    '''
+    
     if dataset == "t17":
         if k == "haiti" or k == "iraq":
             prompt = DAY_SUMMARIZE_PROMPT
         else:
             prompt = DAY_SUMMARIZE_PROMPT_TMP
-    '''
+    
     assert len(pred_timelines) == len(golden_timelines)
 
     results = []
@@ -674,7 +649,7 @@ def evaluate_timelines(golden_timelines, dataset, keyword, des_dir):
     for golden_timeline, pred_timeline in zip(tqdm(golden_timelines, desc=f"acquire timeline info:{dataset}-{keyword}"), pred_timelines):    
 
         tilse_timeline = {datetime.strptime(key, "%Y-%m-%d").date(): value for key, value in pred_timeline.items()}
-        '''
+        
         if not os.path.exists(os.path.join(des_dir, "pred_timelines_info.json")):
             tilse_timeline_tmp = copy.deepcopy(tilse_timeline)
             for event_time, event_content_list in tilse_timeline_tmp.items():
@@ -684,7 +659,7 @@ def evaluate_timelines(golden_timelines, dataset, keyword, des_dir):
                 print(res)
                 res_list = res.split("\n")
                 tilse_timeline[event_time] = res_list
-        '''
+        
 
         pred_timeline = TilseTimeline(tilse_timeline)
         ground_truth = TilseGroundTruth([TilseTimeline(date_to_summaries(golden_timeline))])    
@@ -772,7 +747,7 @@ if __name__ == "__main__":
         same_event2cluster = {int(key): value for key, value in same_event2cluster.items()}
         id2event = {int(key): value for key, value in id2event.items()}
 
-        '''
+        
         same_event_pool, same_event2cluster = postprocess_clusters(id2event, same_event_pool, same_event2cluster, args.dataset, k)
         same_event_pool_path = os.path.join(src_dir, "event_pool_same_events.json")
         same_event2cluster_path = os.path.join(src_dir, "event2cluster_same_events.json")
@@ -780,11 +755,11 @@ if __name__ == "__main__":
             json.dump(same_event_pool, f, ensure_ascii=False, indent=4)
         with open(same_event2cluster_path, "w", encoding="utf-8") as f:
             json.dump(same_event2cluster, f, ensure_ascii=False, indent=4)
-        '''
-
-        #cluster_summarization(id2event, same_event_pool, same_event2cluster, args.dataset, k, des_dir)
         
-        #acquire_sorted_event_info(main_events_dic, id2event, same_event_pool, same_event2cluster, args.dataset, k, des_dir, 0.3)
+
+        cluster_summarization(id2event, same_event_pool, same_event2cluster, args.dataset, k, des_dir)
+        
+        acquire_sorted_event_info(main_events_dic, id2event, same_event_pool, same_event2cluster, args.dataset, k, des_dir, 0.3)
         
         with open(os.path.join(des_dir, "same_cls2event_info.json"), "r", encoding="utf-8") as f:
             sorted_timeline_event_info = json.load(f)
@@ -800,7 +775,7 @@ if __name__ == "__main__":
                 golden_timelines.append(data)
 
         average_timeline_length = get_average_summary_length(golden_timelines)
-        #filtered_timelines(golden_timelines, sorted_timeline_event_info, args.dataset, k, des_dir)
+        filtered_timelines(golden_timelines, sorted_timeline_event_info, args.dataset, k, des_dir)
         
         final_timeline_formation(args.dataset, k, des_dir, src_dir, keywords_str, average_timeline_length)
         
